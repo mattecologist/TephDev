@@ -3,5 +3,6 @@
 export(build.overwinter)
 export(cherry_dev)
 export(create_Ta)
+export(hourly.interpolate)
 export(overwinter)
 export(yonow.model)
