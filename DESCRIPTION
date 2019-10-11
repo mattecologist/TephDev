@@ -1,0 +1,16 @@
+Package: TephDev
+Type: Package
+Title: Development And Distribution of Fruit Flies (And Other Insects)
+Version: 0.1.0
+Author: Matt Hill
+Maintainer: Matt Hill <matthill@protonmail.com>
+Description: Collection of development models, and weather and climate data wrangling scripts used to model tephritid (Teph) fruit flies development (Dev). Useful for other insects too.
+    Model sources cited with relevant functions. 
+License: CC0
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    reshape2
+RoxygenNote: 6.1.1
+Suggests: 
+    testthat
