@@ -78,3 +78,49 @@ overwinter_raster <- function(brick_name = Ta_range, t.thresh = 18, n.days = 5) 
     cat("Done!", "\n")
     return(complete)
 }
+
+#' Cumulative degree day function - raster based
+#'
+#' Calculates cumulative degree days for RasterBrick objects
+#' these are triggered by X consecutive days below a threshold temperature / broken by X days above
+#' @param Tmin A \code{RasterBrick} object of minimum temperatures
+#' @param Tmax A \code{RasterBrick} object of maximum temperatures
+#' @param tlow Low temperature threshold
+#' @param thigh High temperature threshold
+#' @param len.layers How long (in days) to run the analysis for
+#' @return \code{RasterStack} object showing cumulative degree days for a given cell
+#' @author Matt Hill
+#' @export
+
+spatial_degree_day <- function(Tmin = Tmin,
+                               Tmax = Tmax,
+                               tlow= 0,
+                               thigh=100,
+                               len.layers=365){
+    stored.z <- getZ(Tmin)
+
+    Tnew <- Tmin
+    for (i in 1:len.layers){
+        Tmin[[i]] <- ifelse((getValues(Tmax[[i]])< tlow), 0,
+                            ifelse (getValues(Tmin[[i]]) > tlow, ((getValues(Tmax[[i]]) + getValues(Tmin[[i]]))/2) - tlow,
+                                    ((getValues(Tmax[[i]])-tlow)/2) * ((getValues(Tmax[[i]]) -tlow)/(getValues(Tmax[[i]]) - getValues(Tmin[[i]])))))
+
+        Tmax[[i]] <- ifelse((getValues(Tmax[[i]]) < thigh), 0,
+                            ifelse (getValues(Tmin[[i]]) > thigh, ((getValues(Tmax[[i]]) + getValues(Tmin[[i]]))/2) - thigh,
+                                    ((getValues(Tmax[[i]])-thigh)/2) * ((getValues(Tmax[[i]]) - thigh)/(getValues(Tmax[[i]]) - getValues(Tmin[[i]])))))
+
+        Tnew[[i]] <- Tmin[[i]] - Tmax[[i]]
+    }
+
+    CDD <- Tnew[[1:len.layers]]
+    x = 2
+
+    while (x <= nlayers(CDD)){
+        CDD[[x]] <-  CDD[[x-1]] + CDD[[x]]
+        x = x + 1
+    }
+
+    CDD <- setZ(CDD, stored.z[1:len.layers], name="Date")
+
+    return (CDD)
+}
