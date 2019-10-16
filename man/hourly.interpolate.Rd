@@ -13,10 +13,13 @@ hourly.interpolate(climate = climate)
 An expanded data.frame of \code{climate} with 1 row per hour of each day provided, with corresponding temperature value
 }
 \description{
-This function uses the \code{suncalc} package and a vector of dates to calculate solar noon and sunrise
+This function interpolates the daily minimum and maximum temperature values to predict hourly temperature values.
+The function uses the location, the \code{suncalc} package and a vector of dates to calculate solar noon and sunrise times (hour).
 Adjusts the sine coefficients to the location information, and from there assumes Tmin is achieved at
 sunrise-1 hour and Tmax is achieved at solar noon + 2 hours.
-Original calculations are found in chpater 2 of Campbell & Norman (1998)
+}
+\details{
+Original calculations are found in chapter 2 of Campbell & Norman (1998)
 }
 \references{
 Campbell, G. S., & Norman, J. M. (1998). An Introduction to Environmental Biophysics. https://doi.org/10.1007/978-1-4612-1626-1

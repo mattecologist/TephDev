@@ -227,3 +227,99 @@ hourly.interpolate <- function(climate=climate){
     return (hour.climate.data)
 }
 
+#' Create a temperature vector
+#'
+#' Downloads Australian Bureau of Meterology data and formats into a data.frame for use in development models
+#' This function uses the 3 nearest stations to patch in missing data. Uses the the \code{bomrang} package
+#'
+#' @param xy Coordinates (lat-long) for site to extract data from
+#' @param datemin Earliest date to go back to get recrods for
+#' @param datemax Latest date to get records for (default=current day)
+
+create.temp.vec <- function(xy = xy, datemin=Sys.Date()-365, datemax=Sys.Date()){
+    get_temp_data <- function (station, datemin=datemin, datemax=datemax) {
+        get_historical(station, type="max")
+        get_historical(station, type="min")
+
+        tmax <- read.csv(paste0("/tmp/RtmpzLRB3S/IDCJAC0010_",station,"_1800_Data.csv"), header=T)
+        tmin <- read.csv(paste0("/tmp/RtmpzLRB3S/IDCJAC0011_",station,"_1800_Data.csv"), header=T)
+
+        tmax$Date <- as.Date(paste0(tmax$Year,"-", tmax$Month,"-", tmax$Day),"%Y-%m-%d")
+        tmin$Date <- as.Date(paste0(tmin$Year,"-", tmin$Month,"-", tmin$Day),"%Y-%m-%d")
+
+        if (datemax == Sys.Date()){
+            tmax <- tmax[tmax$Date > datemin,]
+            tmin <- tmin[tmin$Date > datemin,]
+        }else{
+            tmax <- tmax[tmax$Date > datemin & tmax$Date < datemax,]
+            tmin <- tmin[tmin$Date > datemin & tmin$Date < datemax,]
+        }
+
+        temp_df <- merge(tmax, tmin, by=c("Bureau.of.Meteorology.station.number", "Date"))
+
+        temp_df <-temp_df[,c(1, 2, 14, 7)]
+
+        colnames (temp_df) <- c("Station", "Date", "Tmin", "Tmax")
+        temp_df$Date <- as.Date(temp_df$Date, origin = "1970-01-01")
+
+        return (temp_df)
+
+    }
+
+    statid <- sweep_for_stations(latlon=c(xy[[1]], xy[[2]]))$site[1:3]
+
+    temp.dat1 <- get_temp_data(station=as.numeric(statid[1]), datemin=as.Date(datemin), datemax=as.Date(datemax))
+    temp.dat2 <- get_temp_data(station=as.numeric(statid[2]), datemin=as.Date(datemin), datemax=as.Date(datemax))
+    temp.dat3 <- get_temp_data(station=as.numeric(statid[3]), datemin=as.Date(datemin), datemax=as.Date(datemax))
+
+    ## add to a list
+    temp.dat.list <- list(temp.dat1, temp.dat2, temp.dat3)
+
+    ## determine which is longest
+    temp.dat <- temp.dat.list[[which.max(c(nrow(temp.dat1), nrow(temp.dat2), nrow(temp.dat3)))]]
+
+    # fill data with nearest station
+    temp.dat[match(temp.dat1$Date, temp.dat$Date), ] <- temp.dat1
+
+    ## fill in blanks
+    blanks.fill <- temp.dat2[which(temp.dat2$Date %in% temp.dat$Date[is.na(temp.dat$Tmin) | is.na (temp.dat$Tmax)]),]
+    temp.dat[match(blanks.fill$Date, temp.dat$Date), ] <- blanks.fill
+
+    ## again, just if there are still blanks
+    blanks.fill <- temp.dat3[which(temp.dat3$Date %in% temp.dat$Date[is.na(temp.dat$Tmin) | is.na (temp.dat$Tmax)]),]
+    temp.dat[match(blanks.fill$Date, temp.dat$Date), ] <- blanks.fill
+
+    ## 'climate' should be a dataframe of (Date, Latitude, Longitude, Tmin, Tmax)
+    climate <- cbind(temp.dat$Date, xy[1], xy[2], temp.dat[,c("Tmin", "Tmax")])
+    colnames (climate) <- c("Date", "Latitude", "Longitude", "Tmin", "Tmax")
+
+    m <- hourly.interpolate(climate)
+    m$Date <- as.Date(m$Date)
+    return(m)
+
+}
+
+
+
+create.prec.vec <- function(xy = xy, datemin=Sys.Date()-365, datemax=Sys.Date()){
+    statid <- sweep_for_stations(latlon=c(xy[[1]], xy[[2]]))$site[1:3]
+
+    get_historical(statid[1], type="rain")
+    prec <- read.csv(paste0("/tmp/RtmpzLRB3S/IDCJAC0009_",statid[1],"_1800_Data.csv"), header=T)
+
+    prec$Date <- as.Date(paste0(prec$Year,"-", prec$Month,"-", prec$Day),"%Y-%m-%d")
+
+    if (datemax == Sys.Date()){
+        prec <- prec[prec$Date > datemin,]
+    }else{
+        prec <- prec[prec$Date > datemin & prec$Date < datemax,]
+    }
+
+    prec.24 <- prec[rep(seq_len(nrow(prec)), each=24),1:ncol(prec)]
+
+    for (i in unique(prec.24$Date)){
+        prec.24$prec[prec.24$Date == i] <- (prec.24$Rainfall.amount..millimetres.[prec.24$Date== i])/24
+    }
+
+    return (prec.24)
+}

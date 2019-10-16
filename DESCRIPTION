@@ -12,7 +12,8 @@ Imports:
     reshape2,
     suncalc,
     lubridate,
-    raster
+    raster,
+    bomrang
 RoxygenNote: 6.1.1
 Suggests: 
     testthat,
