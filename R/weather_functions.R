@@ -1,12 +1,12 @@
 ##### Weather functions
 
-#' Simple overwintering function
+#' Simple overwintering function - vector based
 #'
 #' Switch for overwintering. This calculates cumulative days less than 18 degrees (5 needed to enter)
 #' Currently calculated on the Ta (Average temperature for the day - based on the interpolated temp calculations)
 #' @export
 
-overwinter <- function(tempvec = tempvec, datevec = datevec) {
+overwinter_vector <- function(tempvec = tempvec, datevec = datevec) {
 
     x <- as.data.frame(tempvec)
     colnames(x) <- "Ta"
@@ -66,14 +66,14 @@ overwinter <- function(tempvec = tempvec, datevec = datevec) {
 }
 
 
-#' Simple cherry_dev
+#' Simple day degree model
 #'
 #' Switch for overwintering. This calculates cumulative days less than 18 degrees (5 needed to enter)
 #' Currently calculated on the Ta (Average temperature for the day - based on the interpolated temp calculations)
 #' @export
-cherry_dev <- function(tlow = 4.5, thigh = 100, tempvec = tempvec, budburst = "2015-08-31") {
+day_degree_simple <- function(tlow = 4.5, thigh = 100, tempvec = tempvec, start.date = "2015-08-31") {
 
-    degday <- tempvec[tempvec$Date > budburst, ]
+    degday <- tempvec[tempvec$Date > start.date, ]
     degday$AppThresLow <- tlow
     degday$AppThresHigh <- thigh
 
@@ -128,7 +128,7 @@ cherry_dev <- function(tlow = 4.5, thigh = 100, tempvec = tempvec, budburst = "2
 #' @references Campbell, G. S., & Norman, J. M. (1998). An Introduction to Environmental Biophysics. https://doi.org/10.1007/978-1-4612-1626-1
 
 
-hourly.interpolate <- function(climate=climate){
+hourly_interpolate <- function(climate=climate){
 
     if ("DateCleared" %in% colnames (climate)){
         colnames(climate)[which(names(climate) == "DateCleared")] <- "Date"
@@ -235,17 +235,17 @@ hourly.interpolate <- function(climate=climate){
 #' @param xy Coordinates (lat-long) for site to extract data from
 #' @param datemin Earliest date to go back to get recrods for
 #' @param datemax Latest date to get records for (default=current day)
+#' @return A formatted data.frame with hourly temperature data and the date
+#' @export
 
-create.temp.vec <- function(xy = xy, datemin=Sys.Date()-365, datemax=Sys.Date()){
+create_temp_vec <- function(xy = xy, datemin=Sys.Date()-365, datemax=Sys.Date()){
     get_temp_data <- function (station, datemin=datemin, datemax=datemax) {
-        get_historical(station, type="max")
-        get_historical(station, type="min")
 
-        tmax <- read.csv(paste0("/tmp/RtmpzLRB3S/IDCJAC0010_",station,"_1800_Data.csv"), header=T)
-        tmin <- read.csv(paste0("/tmp/RtmpzLRB3S/IDCJAC0011_",station,"_1800_Data.csv"), header=T)
+         tmax <- as.data.frame(get_historical(station, type="max"))
+        tmin <- as.data.frame(get_historical(station, type="min"))
 
-        tmax$Date <- as.Date(paste0(tmax$Year,"-", tmax$Month,"-", tmax$Day),"%Y-%m-%d")
-        tmin$Date <- as.Date(paste0(tmin$Year,"-", tmin$Month,"-", tmin$Day),"%Y-%m-%d")
+        tmax$Date <- as.Date(paste0(tmax$year,"-", tmax$month,"-", tmax$day),"%Y-%m-%d")
+        tmin$Date <- as.Date(paste0(tmin$year,"-", tmin$month,"-", tmin$day),"%Y-%m-%d")
 
         if (datemax == Sys.Date()){
             tmax <- tmax[tmax$Date > datemin,]
@@ -255,9 +255,9 @@ create.temp.vec <- function(xy = xy, datemin=Sys.Date()-365, datemax=Sys.Date())
             tmin <- tmin[tmin$Date > datemin & tmin$Date < datemax,]
         }
 
-        temp_df <- merge(tmax, tmin, by=c("Bureau.of.Meteorology.station.number", "Date"))
+        temp_df <- merge(tmax, tmin, by=c("station_number", "Date"))
 
-        temp_df <-temp_df[,c(1, 2, 14, 7)]
+        temp_df <-temp_df[,c("station_number", "Date", "min_temperature", "max_temperature")]
 
         colnames (temp_df) <- c("Station", "Date", "Tmin", "Tmax")
         temp_df$Date <- as.Date(temp_df$Date, origin = "1970-01-01")
@@ -293,21 +293,31 @@ create.temp.vec <- function(xy = xy, datemin=Sys.Date()-365, datemax=Sys.Date())
     climate <- cbind(temp.dat$Date, xy[1], xy[2], temp.dat[,c("Tmin", "Tmax")])
     colnames (climate) <- c("Date", "Latitude", "Longitude", "Tmin", "Tmax")
 
-    m <- hourly.interpolate(climate)
+    m <- hourly_interpolate(climate)
     m$Date <- as.Date(m$Date)
     return(m)
 
 }
 
+#' Create a precipitation vector
+#'
+#' Downloads Australian Bureau of Meterology data and formats into a data.frame for use in development models
+#' Uses the the \code{bomrang} package to obtain the data.
+#'
+#' @param xy Coordinates (lat-long) for site to extract data from
+#' @param datemin Earliest date to go back to get recrods for
+#' @param datemax Latest date to get records for (default=current day)
+#' @return A formatted data.frame with hourly interpolated precipitation data and the dates.
+#' @export
 
 
-create.prec.vec <- function(xy = xy, datemin=Sys.Date()-365, datemax=Sys.Date()){
+create_prec_vec <- function(xy = xy, datemin=Sys.Date()-365, datemax=Sys.Date()){
     statid <- sweep_for_stations(latlon=c(xy[[1]], xy[[2]]))$site[1:3]
 
-    get_historical(statid[1], type="rain")
-    prec <- read.csv(paste0("/tmp/RtmpzLRB3S/IDCJAC0009_",statid[1],"_1800_Data.csv"), header=T)
+    prec <- as.data.frame(get_historical(statid[1], type="rain"))
 
-    prec$Date <- as.Date(paste0(prec$Year,"-", prec$Month,"-", prec$Day),"%Y-%m-%d")
+
+    prec$Date <- as.Date(paste0(prec$year,"-", prec$month,"-", prec$day),"%Y-%m-%d")
 
     if (datemax == Sys.Date()){
         prec <- prec[prec$Date > datemin,]
@@ -318,7 +328,7 @@ create.prec.vec <- function(xy = xy, datemin=Sys.Date()-365, datemax=Sys.Date())
     prec.24 <- prec[rep(seq_len(nrow(prec)), each=24),1:ncol(prec)]
 
     for (i in unique(prec.24$Date)){
-        prec.24$prec[prec.24$Date == i] <- (prec.24$Rainfall.amount..millimetres.[prec.24$Date== i])/24
+        prec.24$prec[prec.24$Date == i] <- (prec.24$rainfall[prec.24$Date== i])/24
     }
 
     return (prec.24)

@@ -1,22 +1,6 @@
-#' Average Temp Raster
+#' Simple overwintering function - raster based
 #'
-#' Simple function to create an average Temp layer from Tmin and Tmax layers or Bricks.
-#' @param x \code{RasterLayer} or \code{RasterBrick} object (e.g. Tmin)
-#' @param y \code{RasterLayer} or \code{RasterBrick} object (e.g. Tmin)
-#' @param ext \code{extent} object or vector with coordinates of extent
-#' @return \code{RasterLayer} or \code{RasterBrick} object with averaged temperatures
-#' @export
-create_Ta <- function(x, y, ext) {
-    x <- raster::crop(x, ext)
-    y <- raster::crop(y, ext)
-    z <- (x + y)/2
-    names(z) <- names(x)
-    return(z)
-}
-
-#' Raster-based Overwintering calculations
-#'
-#' Similar to \code{overwinter()} but spatial. Calculates number of overwintering days:
+#' Calculates number of overwintering days:
 #' these are triggered by X consecutive days below a threshold temperature / broken by X days above
 #' @param brick_name The \code{RasterBrick} object e.g. Tmin
 #' @param t.thresh Threshold temperature in degrees
@@ -25,7 +9,7 @@ create_Ta <- function(x, y, ext) {
 #' @author Matt Hill
 #' @export
 
-build.overwinter <- function(brick_name = Ta_range, t.thresh = 18, n.days = 5) {
+overwinter_raster <- function(brick_name = Ta_range, t.thresh = 18, n.days = 5) {
     raster1 <- raster2 <- brick_name
     names_vec <- names(raster1)
 

@@ -27,7 +27,7 @@
 #' @author Matt Hill
 #' @export
 
-GPFS.model <- function(weather.df=weather.df,
+GPFS_model <- function(weather.df=weather.df,
                       Tmin = 13.3,
                       Topt1 = 24,
                       Topt2 = 34,

@@ -27,7 +27,7 @@
 #' @references Yonow, T, M.P Zalucki, R.W Sutherst, B.C Dominiak, G.F Maywald, D.A Maelzer, and D.J Kriticos. “Modelling the Population Dynamics of the Queensland Fruit Fly, Bactrocera (Dacus) Tryoni: A Cohort-Based Approach Incorporating the Effects of Weather.” Ecological Modelling 173, no. 1 (March 2004): 9–30. https://doi.org/10.1016/S0304-3800(03)00306-5.
 
 
-yonow.model <- function(tempvec = tempvec, datevec = datevec, start.date = start.date, ep1 = 0.0382, ep2 = 0.4229,
+yonow_model <- function(tempvec = tempvec, datevec = datevec, start.date = start.date, ep1 = 0.0382, ep2 = 0.4229,
     lp1 = 0.0061, lp2 = 0.0609, pp1 = 0.0061, pp2 = 0.068, tf1 = 0.0108, tf2 = 0.133, ebt = 11.1, lbt = 10, pbt = 11.2,
     tfbt = 12.3, reverse = FALSE, adult = FALSE) {
 
