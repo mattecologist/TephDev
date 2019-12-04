@@ -266,7 +266,7 @@ create_temp_vec <- function(xy = xy, datemin=Sys.Date()-365, datemax=Sys.Date())
 
     }
 
-    statid <- sweep_for_stations(latlon=c(xy[[1]], xy[[2]]))$site[1:3]
+    statid <- bomrang::sweep_for_stations(latlon=c(xy[[1]], xy[[2]]))$site[1:3]
 
     temp.dat1 <- get_temp_data(station=as.numeric(statid[1]), datemin=as.Date(datemin), datemax=as.Date(datemax))
     temp.dat2 <- get_temp_data(station=as.numeric(statid[2]), datemin=as.Date(datemin), datemax=as.Date(datemax))

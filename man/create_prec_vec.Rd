@@ -4,8 +4,7 @@
 \alias{create_prec_vec}
 \title{Create a precipitation vector}
 \usage{
-create_prec_vec(xy = xy, datemin = Sys.Date() - 365,
-  datemax = Sys.Date())
+create_prec_vec(xy = xy, datemin = Sys.Date() - 365, datemax = Sys.Date())
 }
 \arguments{
 \item{xy}{Coordinates (lat-long) for site to extract data from}

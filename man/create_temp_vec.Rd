@@ -4,8 +4,7 @@
 \alias{create_temp_vec}
 \title{Create a temperature vector}
 \usage{
-create_temp_vec(xy = xy, datemin = Sys.Date() - 365,
-  datemax = Sys.Date())
+create_temp_vec(xy = xy, datemin = Sys.Date() - 365, datemax = Sys.Date())
 }
 \arguments{
 \item{xy}{Coordinates (lat-long) for site to extract data from}
