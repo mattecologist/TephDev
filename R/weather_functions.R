@@ -241,8 +241,8 @@ hourly_interpolate <- function(climate=climate){
 create_temp_vec <- function(xy = xy, datemin=Sys.Date()-365, datemax=Sys.Date()){
     get_temp_data <- function (station, datemin=datemin, datemax=datemax) {
 
-         tmax <- as.data.frame(get_historical(station, type="max"))
-        tmin <- as.data.frame(get_historical(station, type="min"))
+         tmax <- as.data.frame(bomrang::get_historical(station, type="max"))
+        tmin <- as.data.frame(bomrang::get_historical(station, type="min"))
 
         tmax$Date <- as.Date(paste0(tmax$year,"-", tmax$month,"-", tmax$day),"%Y-%m-%d")
         tmin$Date <- as.Date(paste0(tmin$year,"-", tmin$month,"-", tmin$day),"%Y-%m-%d")
