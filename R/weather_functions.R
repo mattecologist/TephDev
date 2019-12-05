@@ -172,12 +172,15 @@ hourly_interpolate <- function(climate=climate){
     #total number of hours in the simulations
     numhours<-length(climate[,1])
 
+    pb = txtProgressBar(min = 1, max = numhours, width=20, initial = 1)
+    message ("Calculating sine coefficient")
     ## From equation 2.2
     w <- pi/12
     sin.coeff <- vector()
     for (i in 1:numhours){
         sin.coeff[i] <- 0.44-0.46*sin(w*(climate$hour[i]+climate$t.adj[i])+0.9)+0.11*sin(2*(w*(climate$hour[i]+climate$t.adj[i]))+0.9)
-        print (i)
+        #print (i)
+    setTxtProgressBar(pb,i)
     }
 
     #Create vectors for processing
@@ -188,6 +191,8 @@ hourly_interpolate <- function(climate=climate){
     sunrise <- as.integer(format(round(climate$sunrise, units="hours"), format="%H")) # hour of sunrise - rounded to nearest hour
     solar_noon <- as.integer(format(round(climate$solar_noon, units="hours"), format="%H")) # hour of solar_noon - rounded to nearest hour
 
+    
+    message ("Calculating Ta")
     ## Loop to iterate over all the hours in the dataset provided, and use the above vectors to calculate a "Ta" per hour
     pb = txtProgressBar(min = 1, max = numhours, width=20, initial = 1)
     
