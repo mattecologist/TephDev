@@ -189,7 +189,8 @@ hourly_interpolate <- function(climate=climate){
     solar_noon <- as.integer(format(round(climate$solar_noon, units="hours"), format="%H")) # hour of solar_noon - rounded to nearest hour
 
     ## Loop to iterate over all the hours in the dataset provided, and use the above vectors to calculate a "Ta" per hour
-
+    pb = txtProgressBar(min = 1, max = reps, width=20, initial = 1)
+    
     for(i in 1:numhours){ ###START LOOP (note the + sign in the console (bottom left window))
         if(i>=25){
             j<-i-24 ## j refers to the max/min conditions of the previous day
@@ -211,7 +212,8 @@ hourly_interpolate <- function(climate=climate){
         }else{
             hourly<-rbind(hourly,Ta)
         }
-        print(i)
+        #print(i)
+        setTxtProgressBar(pb,i)
     } ###END LOOP
 
     ##calculating the total number of hours in the simulation.
