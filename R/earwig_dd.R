@@ -7,6 +7,7 @@
 #' @param temps Dataframe generated from \code{day_degree_simple}
 #' @param begin.date Date to begin model runs
 #' @param date.error How many days +/- of begin.date to sample from
+#' @param one.sided True/False flag for if dates can only be selected BEFORE observation
 #' @param reps Number or replicates
 #' @param egg True/False flag of whether to include egg development 
 #' @return A formatted data.frame with model outputs for each replicate
@@ -14,7 +15,8 @@
 
 earwig_dd <- function (temps=temps, 
                        begin.date=Sys.Date(), 
-                       date.error=2, 
+                       date.error=2,
+                       one.sided=TRUE,
                        reps=10, 
                        egg=TRUE){
   
@@ -23,6 +25,9 @@ earwig_dd <- function (temps=temps,
   begin.date <- as.Date(begin.date, origin="1970-01-01")
   
   new.date <- as.Date(runif (1, min=begin.date-date.error, max=begin.date+date.error), origin="1970-01-01")
+  if (one.sided==TRUE){
+  new.date <- as.Date(runif (1, min=begin.date-date.error, max=begin.date), origin="1970-01-01")
+  }
   
   pb = txtProgressBar(min = 1, max = reps, width=20, initial = 1)
   

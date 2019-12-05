@@ -4,24 +4,10 @@
 \alias{GPFS_model}
 \title{Generic Pest Forecast System (GPFS)}
 \usage{
-GPFS_model(
-  weather.df = weather.df,
-  Tmin = 13.3,
-  Topt1 = 24,
-  Topt2 = 34,
-  Tmax = 41,
-  Tmht = 33,
-  Tmlt = 13.3,
-  beta1 = 1101.7,
-  beta2 = -49892,
-  beta3 = -162.9,
-  beta4 = 25.9595,
-  beta5 = -0.4959,
-  beta6 = 0,
-  beta7 = 50.4,
-  beta8 = 0.008,
-  precipitation = FALSE
-)
+GPFS_model(weather.df = weather.df, Tmin = 13.3, Topt1 = 24,
+  Topt2 = 34, Tmax = 41, Tmht = 33, Tmlt = 13.3, beta1 = 1101.7,
+  beta2 = -49892, beta3 = -162.9, beta4 = 25.9595, beta5 = -0.4959,
+  beta6 = 0, beta7 = 50.4, beta8 = 0.008, precipitation = FALSE)
 }
 \arguments{
 \item{Tmin}{Temperature minimum}

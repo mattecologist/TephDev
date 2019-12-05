@@ -4,13 +4,8 @@
 \alias{earwig_dd}
 \title{Earwig day degree simulations}
 \usage{
-earwig_dd(
-  temps = temps,
-  begin.date = Sys.Date(),
-  date.error = 2,
-  reps = 10,
-  egg = TRUE
-)
+earwig_dd(temps = temps, begin.date = Sys.Date(), date.error = 2,
+  one.sided = TRUE, reps = 10, egg = TRUE)
 }
 \arguments{
 \item{temps}{Dataframe generated from \code{day_degree_simple}}
@@ -18,6 +13,8 @@ earwig_dd(
 \item{begin.date}{Date to begin model runs}
 
 \item{date.error}{How many days +/- of begin.date to sample from}
+
+\item{one.sided}{True/False flag for if dates can only be selected BEFORE observation}
 
 \item{reps}{Number or replicates}
 

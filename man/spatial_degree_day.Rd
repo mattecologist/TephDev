@@ -4,13 +4,8 @@
 \alias{spatial_degree_day}
 \title{Cumulative degree day function - raster based}
 \usage{
-spatial_degree_day(
-  Tmin = Tmin,
-  Tmax = Tmax,
-  tlow = 0,
-  thigh = 100,
-  len.layers = 365
-)
+spatial_degree_day(Tmin = Tmin, Tmax = Tmax, tlow = 0, thigh = 100,
+  len.layers = 365)
 }
 \arguments{
 \item{Tmin}{A \code{RasterBrick} object of minimum temperatures}

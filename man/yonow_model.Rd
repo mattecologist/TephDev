@@ -4,25 +4,11 @@
 \alias{yonow_model}
 \title{Yonow et al. (2004) model for Queensland Fruit Fly development}
 \usage{
-yonow_model(
-  tempvec = tempvec,
-  datevec = datevec,
-  start.date = start.date,
-  ep1 = 0.0382,
-  ep2 = 0.4229,
-  lp1 = 0.0061,
-  lp2 = 0.0609,
-  pp1 = 0.0061,
-  pp2 = 0.068,
-  tf1 = 0.0108,
-  tf2 = 0.133,
-  ebt = 11.1,
-  lbt = 10,
-  pbt = 11.2,
-  tfbt = 12.3,
-  reverse = FALSE,
-  adult = FALSE
-)
+yonow_model(tempvec = tempvec, datevec = datevec,
+  start.date = start.date, ep1 = 0.0382, ep2 = 0.4229,
+  lp1 = 0.0061, lp2 = 0.0609, pp1 = 0.0061, pp2 = 0.068,
+  tf1 = 0.0108, tf2 = 0.133, ebt = 11.1, lbt = 10, pbt = 11.2,
+  tfbt = 12.3, reverse = FALSE, adult = FALSE)
 }
 \arguments{
 \item{tempvec}{A vector of temperatures (preferably daily average temp (Ta))}
