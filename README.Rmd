@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
 
 # TephDev
 
+![fly boy fly boy](man/figures/fly.png)
 <!-- badges: start -->
 <!-- badges: end -->
 
@@ -38,4 +39,67 @@ This is a basic example which shows you how to solve a common problem:
 library(TephDev)
 ## basic example code
 ```
+using a location, create a temperature vector from Australian weather stations (this function is used to create hourly data, so its then straightforward to get Ta)
+```{r}
+loc <- c(-35.2809, 149.1300)
+temps <- create_temp_vec(loc)
 
+library (tidyverse)
+
+temps <- temps %>% 
+  group_by(Date)%>%
+  summarise(Ta=mean(Ta))%>%
+  as.data.frame()
+
+```
+
+Using the model from Yonow et al. (2004) to demonstrate a simple day degree growth for QFF.
+
+```{r}
+model1 <- yonow_model(tempvec = temps$Ta, datevec = temps$Date, start.date="2018-12-14")
+```
+
+Just plotting the model output gives development times and dates for the three stages modelled.
+```{r}
+library (ggplot2)
+library (ggsci)
+
+ggplot(model1, aes(Date, value, colour=variable))+
+  geom_point(aes(shape=variable),size=2)+
+  geom_line(size=1, alpha=0.5)+
+  ggsci::scale_color_jco()+
+  theme_minimal()
+```
+
+Its also possible to include the teneral female stage
+```{r}
+model2 <- yonow_model(tempvec = temps$Ta, datevec = temps$Date, start.date="2018-12-14",
+                      adult = TRUE)
+```
+
+With some simple formatting, can scale the outputs.... 
+```{r}
+
+model2$value[model2$variable == "larvae"] <- model2$value[model2$variable == "larvae"] + max(model2$value[model2$variable =="egg"])
+
+model2$value[model2$variable == "pupae"] <- model2$value[model2$variable == "pupae"] + max(model2$value[model2$variable =="larvae"])
+
+model2$value[model2$variable == "teneral"] <- model2$value[model2$variable == "teneral"] + max(model2$value[model2$variable =="pupae"])
+
+model2 <- model2 %>%
+  mutate(value2=scales::rescale(value, to = c(0, 1)))
+
+```
+
+....which gives a 0-1 development across the entire lifecycle
+```{r}
+ggplot(model2, aes(Date, value2, colour=variable))+
+  geom_point(aes(shape=variable),size=2)+
+  geom_line(size=1, alpha=0.5)+
+  ggsci::scale_color_jco()+
+  theme_minimal()
+```
+
+## References
+
+Yonow, T, M.P Zalucki, R.W Sutherst, B.C Dominiak, G.F Maywald, D.A Maelzer, and D.J Kriticos. “Modelling the Population Dynamics of the Queensland Fruit Fly, Bactrocera (Dacus) Tryoni: A Cohort-Based Approach Incorporating the Effects of Weather.” Ecological Modelling 173, no. 1 (March 2004): 9–30. https://doi.org/10.1016/S0304-3800(03)00306-5.
