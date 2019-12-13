@@ -24,7 +24,8 @@ devtools::install_github("mattecologist/TephDev")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example for running a day degree model for *Bactrocera
+tryoni*, the Queensland Fruit Fly.
 
 ``` r
 library(TephDev)
@@ -41,23 +42,24 @@ library (ggplot2)
 library (ggsci)
 ```
 
-using a location, create a temperature vector from Australian weather
+Using a location, create a temperature vector from Australian weather
 stations (this function is used to create hourly data, so its then
-straightforward to get Ta)
+straightforward to get daily Ta from there).
 
 ``` r
-# Loc
+
+# Location here is for Canberra, Australia
 loc <- c(-35.2809, 149.1300)
 temps <- create_temp_vec(loc)
 #> Registered S3 method overwritten by 'hoardr':
 #>   method           from
 #>   print.cache_info httr
-#> Data saved as /tmp/RtmpGAH2jf/IDCJAC0010_70351_1800_Data.csv
-#> Data saved as /tmp/RtmpGAH2jf/IDCJAC0011_70351_1800_Data.csv
-#> Data saved as /tmp/RtmpGAH2jf/IDCJAC0010_70339_1800_Data.csv
-#> Data saved as /tmp/RtmpGAH2jf/IDCJAC0011_70339_1800_Data.csv
-#> Data saved as /tmp/RtmpGAH2jf/IDCJAC0010_70349_1800_Data.csv
-#> Data saved as /tmp/RtmpGAH2jf/IDCJAC0011_70349_1800_Data.csv
+#> Data saved as /tmp/RtmpCrvYlp/IDCJAC0010_70351_1800_Data.csv
+#> Data saved as /tmp/RtmpCrvYlp/IDCJAC0011_70351_1800_Data.csv
+#> Data saved as /tmp/RtmpCrvYlp/IDCJAC0010_70339_1800_Data.csv
+#> Data saved as /tmp/RtmpCrvYlp/IDCJAC0011_70339_1800_Data.csv
+#> Data saved as /tmp/RtmpCrvYlp/IDCJAC0010_70349_1800_Data.csv
+#> Data saved as /tmp/RtmpCrvYlp/IDCJAC0011_70349_1800_Data.csv
 #> Calculating sine coefficient
 #> Calculating Ta
 

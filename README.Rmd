@@ -33,7 +33,7 @@ devtools::install_github("mattecologist/TephDev")
 ```
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example for running a day degree model for _Bactrocera tryoni_, the Queensland Fruit Fly.
 
 ```{r example, echo=T, results='hide'}
 library(TephDev)
@@ -41,9 +41,11 @@ library (tidyverse)
 library (ggplot2)
 library (ggsci)
 ```
-using a location, create a temperature vector from Australian weather stations (this function is used to create hourly data, so its then straightforward to get Ta)
+Using a location, create a temperature vector from Australian weather stations (this function is used to create hourly data, so its then straightforward to get daily Ta from there).
+
 ```{r, echo=T, results='hide'}
-# Loc
+
+# Location here is for Canberra, Australia
 loc <- c(-35.2809, 149.1300)
 temps <- create_temp_vec(loc)
 
