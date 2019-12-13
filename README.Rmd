@@ -35,16 +35,17 @@ devtools::install_github("mattecologist/TephDev")
 
 This is a basic example which shows you how to solve a common problem:
 
-```{r example}
+```{r example, echo=T, results='hide'}
 library(TephDev)
-## basic example code
+library (tidyverse)
+library (ggplot2)
+library (ggsci)
 ```
 using a location, create a temperature vector from Australian weather stations (this function is used to create hourly data, so its then straightforward to get Ta)
-```{r}
+```{r, echo=T, results='hide'}
+# Loc
 loc <- c(-35.2809, 149.1300)
 temps <- create_temp_vec(loc)
-
-library (tidyverse)
 
 temps <- temps %>% 
   group_by(Date)%>%
@@ -61,9 +62,6 @@ model1 <- yonow_model(tempvec = temps$Ta, datevec = temps$Date, start.date="2018
 
 Just plotting the model output gives development times and dates for the three stages modelled.
 ```{r}
-library (ggplot2)
-library (ggsci)
-
 ggplot(model1, aes(Date, value, colour=variable))+
   geom_point(aes(shape=variable),size=2)+
   geom_line(size=1, alpha=0.5)+
@@ -77,7 +75,7 @@ model2 <- yonow_model(tempvec = temps$Ta, datevec = temps$Date, start.date="2018
                       adult = TRUE)
 ```
 
-With some simple formatting, can scale the outputs.... 
+An with some simple formatting, can scale the outputs.... 
 ```{r}
 
 model2$value[model2$variable == "larvae"] <- model2$value[model2$variable == "larvae"] + max(model2$value[model2$variable =="egg"])

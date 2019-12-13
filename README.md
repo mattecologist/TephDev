@@ -28,30 +28,6 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(TephDev)
-## basic example code
-```
-
-using a location, create a temperature vector from Australian weather
-stations (this function is used to create hourly data, so its then
-straightforward to get Ta)
-
-``` r
-loc <- c(-35.2809, 149.1300)
-temps <- create_temp_vec(loc)
-#> Registered S3 method overwritten by 'hoardr':
-#>   method           from
-#>   print.cache_info httr
-#> Data saved as /tmp/RtmpuGbX4B/IDCJAC0010_70351_1800_Data.csv
-#> Data saved as /tmp/RtmpuGbX4B/IDCJAC0011_70351_1800_Data.csv
-#> Data saved as /tmp/RtmpuGbX4B/IDCJAC0010_70339_1800_Data.csv
-#> Data saved as /tmp/RtmpuGbX4B/IDCJAC0011_70339_1800_Data.csv
-#> Data saved as /tmp/RtmpuGbX4B/IDCJAC0010_70349_1800_Data.csv
-#> Data saved as /tmp/RtmpuGbX4B/IDCJAC0011_70349_1800_Data.csv
-#> Calculating sine coefficient
-#> ====================
-#> Calculating Ta
-#> ====================
-
 library (tidyverse)
 #> ── Attaching packages ─────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 #> ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
@@ -61,6 +37,29 @@ library (tidyverse)
 #> ── Conflicts ────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 #> ✖ dplyr::filter() masks stats::filter()
 #> ✖ dplyr::lag()    masks stats::lag()
+library (ggplot2)
+library (ggsci)
+```
+
+using a location, create a temperature vector from Australian weather
+stations (this function is used to create hourly data, so its then
+straightforward to get Ta)
+
+``` r
+# Loc
+loc <- c(-35.2809, 149.1300)
+temps <- create_temp_vec(loc)
+#> Registered S3 method overwritten by 'hoardr':
+#>   method           from
+#>   print.cache_info httr
+#> Data saved as /tmp/RtmpGAH2jf/IDCJAC0010_70351_1800_Data.csv
+#> Data saved as /tmp/RtmpGAH2jf/IDCJAC0011_70351_1800_Data.csv
+#> Data saved as /tmp/RtmpGAH2jf/IDCJAC0010_70339_1800_Data.csv
+#> Data saved as /tmp/RtmpGAH2jf/IDCJAC0011_70339_1800_Data.csv
+#> Data saved as /tmp/RtmpGAH2jf/IDCJAC0010_70349_1800_Data.csv
+#> Data saved as /tmp/RtmpGAH2jf/IDCJAC0011_70349_1800_Data.csv
+#> Calculating sine coefficient
+#> Calculating Ta
 
 temps <- temps %>% 
   group_by(Date)%>%
@@ -80,9 +79,6 @@ Just plotting the model output gives development times and dates for the
 three stages modelled.
 
 ``` r
-library (ggplot2)
-library (ggsci)
-
 ggplot(model1, aes(Date, value, colour=variable))+
   geom_point(aes(shape=variable),size=2)+
   geom_line(size=1, alpha=0.5)+
@@ -100,7 +96,7 @@ model2 <- yonow_model(tempvec = temps$Ta, datevec = temps$Date, start.date="2018
                       adult = TRUE)
 ```
 
-With some simple formatting, can scale the outputs….
+An with some simple formatting, can scale the outputs….
 
 ``` r
 
