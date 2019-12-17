@@ -4,8 +4,14 @@
 \alias{earwig_dd}
 \title{Earwig day degree simulations}
 \usage{
-earwig_dd(temps = temps, begin.date = Sys.Date(), date.error = 2,
-  one.sided = TRUE, reps = 10, egg = TRUE)
+earwig_dd(
+  temps = temps,
+  begin.date = Sys.Date(),
+  date.error = 2,
+  one.sided = TRUE,
+  reps = 10,
+  egg = TRUE
+)
 }
 \arguments{
 \item{temps}{Dataframe generated from \code{day_degree_simple}}

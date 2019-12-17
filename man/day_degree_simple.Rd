@@ -4,8 +4,12 @@
 \alias{day_degree_simple}
 \title{Simple day degree model}
 \usage{
-day_degree_simple(tlow = 4.5, thigh = 100, tempvec = tempvec,
-  start.date = "2015-08-31")
+day_degree_simple(
+  tlow = 4.5,
+  thigh = 100,
+  tempvec = tempvec,
+  start.date = "2015-08-31"
+)
 }
 \description{
 Switch for overwintering. This calculates cumulative days less than 18 degrees (5 needed to enter)
