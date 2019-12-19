@@ -3,7 +3,9 @@
 #' In development!
 #' 
 #' Download the SILO data from https://www.longpaddock.qld.gov.au/silo/gridded-data/
-#' For this demonstration, use the 2015 min and max temperatures
+#' For this demonstration, use the 2015 min and max temperatures and keep the same file names.
+#' 
+#' 
 #' 
 #' @export
 #' @return A Shiny app instance
@@ -37,9 +39,11 @@ TephDev_vis <- function(silo_dir=silo_dir) {
     return(z)
   }
   
-  flyobs <- read_csv("/home/hil32c/Documents/raster_process/app_data/flypoints.csv") %>%
-    st_as_sf(coords = c("Longitude", "Latitude"),
-             crs = "+proj=longlat +datum=WGS84")
+  # flyobs <- read_csv("/home/hil32c/Documents/raster_process/app_data/flypoints.csv") %>%
+  #   st_as_sf(coords = c("Longitude", "Latitude"),
+  #            crs = "+proj=longlat +datum=WGS84")
+  
+  data(flyobs)
   
 ## Begin app.  
   shinyApp(
