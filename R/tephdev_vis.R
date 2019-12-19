@@ -44,6 +44,7 @@ TephDev_vis <- function(silo_dir=silo_dir) {
   #            crs = "+proj=longlat +datum=WGS84")
   
   data(flyobs)
+  force(flyobs)
   
 ## Begin app.  
   shinyApp(
@@ -53,6 +54,10 @@ TephDev_vis <- function(silo_dir=silo_dir) {
       tabPanel('Model Setup',
                useShinyjs(),
                fluidRow(
+                 selectInput("model_select", "Select organism and model:",
+                             c("QFF (R)" = "yonow",
+                               "QFF (Python)" = "pyonow",
+                               "Earwigs" = "earwig_dd")),
                  p("Use the following map to pan, zoom, and select a bounding box"),
                  #https://github.com/rstudio/leaflet/issues/616
                  leafletOutput("map", height=400, width=400),
@@ -168,8 +173,8 @@ TephDev_vis <- function(silo_dir=silo_dir) {
         r1[] <- NA
         
         message(paste0(as.Date(input$slider2), " selected as start"))
-       # for (ii in 1:length(tempvec())){
-        for (ii in which(datevec >= as.Date(input$slider2))){
+        for (ii in 1:length(tempvec())){
+        #for (ii in which(datevec >= as.Date(input$slider2))){
           incProgress(1/length(which(datevec >= as.Date(input$slider2))), detail = paste("Raster building", ii))
           r1[[ii]] <- as.vector(unlist(lapply(test, `[[`, ii)))
          
@@ -195,6 +200,7 @@ TephDev_vis <- function(silo_dir=silo_dir) {
       })
       
       observeEvent(input$add_button, {
+        pal <- colorNumeric("viridis", getValues(r2()))
         leafletProxy("mapplot", session) %>%
           clearImages()%>%
           clearShapes()%>%
@@ -204,7 +210,9 @@ TephDev_vis <- function(silo_dir=silo_dir) {
           addCircles(data= flyobs,
                      layerId = NULL, group = NULL, stroke = TRUE, color = "yellow",
                      weight = 5, opacity = 0.5, fill = FALSE,
-                     fillOpacity = 0.2)
+                     fillOpacity = 0.2)%>%
+          addLegend(position="bottomright", values=getValues(r2()),
+                    pal=pal)
       })
       
     }
