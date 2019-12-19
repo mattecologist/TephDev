@@ -4,13 +4,16 @@
 \alias{TephDev_vis}
 \title{Shiny app to demonstrate model and data integration}
 \usage{
-TephDev_vis()
+TephDev_vis(silo_dir = silo_dir)
 }
 \value{
 A Shiny app instance
 }
 \description{
-I development!
+In development!
+}
+\details{
+Download the SILO data
 }
 \author{
 Matt Hill
