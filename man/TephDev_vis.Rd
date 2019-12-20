@@ -13,7 +13,8 @@ A Shiny app instance
 In development!
 }
 \details{
-Download the SILO data
+Download the SILO data from https://www.longpaddock.qld.gov.au/silo/gridded-data/
+For this demonstration, use the 2015 min and max temperatures and keep the same file names.
 }
 \author{
 Matt Hill

@@ -13,6 +13,10 @@
 
 TephDev_vis <- function(silo_dir=silo_dir) {
   
+  # to do: fix the raster construction part at the end to take the date selected from slider
+  #        link the models to the select input box
+  #        
+  
   require (shiny)
   require(shinyjs)
   require (leaflet)
