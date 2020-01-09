@@ -11,7 +11,15 @@ day_degree_simple(
   start.date = "2015-08-31"
 )
 }
+\arguments{
+\item{tlow}{Low temperature threshold}
+
+\item{thigh}{High temperature threhold}
+
+\item{tempvec}{Vector of temperatures (and dates)}
+
+\item{start.date}{Date to start analysis on}
+}
 \description{
-Switch for overwintering. This calculates cumulative days less than 18 degrees (5 needed to enter)
-Currently calculated on the Ta (Average temperature for the day - based on the interpolated temp calculations)
+Uses a single-triangle method
 }

@@ -68,8 +68,11 @@ overwinter_vector <- function(tempvec = tempvec, datevec = datevec) {
 
 #' Simple day degree model
 #'
-#' Switch for overwintering. This calculates cumulative days less than 18 degrees (5 needed to enter)
-#' Currently calculated on the Ta (Average temperature for the day - based on the interpolated temp calculations)
+#' Uses a single-triangle method
+#' @param tlow Low temperature threshold
+#' @param thigh High temperature threhold
+#' @param tempvec Vector of temperatures (and dates)
+#' @param start.date Date to start analysis on
 #' @export
 day_degree_simple <- function(tlow = 4.5, thigh = 100, tempvec = tempvec, start.date = "2015-08-31") {
 
