@@ -59,7 +59,7 @@ temps <- temps %>%
 Using the model from Yonow et al. (2004) to demonstrate a simple day degree growth for QFF.
 
 ```{r}
-model1 <- yonow_model(tempvec = temps$Ta, datevec = temps$Date, start.date="2018-12-14")
+model1 <- yonow_model(tempvec = temps$Ta, datevec = temps$Date, start.date="2019-12-14")
 ```
 
 Just plotting the model output gives development times and dates for the three stages modelled.
@@ -73,7 +73,7 @@ ggplot(model1, aes(Date, value, colour=variable))+
 
 Its also possible to include the teneral female stage
 ```{r}
-model2 <- yonow_model(tempvec = temps$Ta, datevec = temps$Date, start.date="2018-12-14",
+model2 <- yonow_model(tempvec = temps$Ta, datevec = temps$Date, start.date="2019-12-14",
                       adult = TRUE)
 ```
 

@@ -30,12 +30,12 @@ tryoni*, the Queensland Fruit Fly.
 ``` r
 library(TephDev)
 library (tidyverse)
-#> ── Attaching packages ─────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+#> ── Attaching packages ───────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 #> ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
 #> ✔ tibble  2.1.3     ✔ dplyr   0.8.3
 #> ✔ tidyr   1.0.0     ✔ stringr 1.4.0
 #> ✔ readr   1.3.1     ✔ forcats 0.4.0
-#> ── Conflicts ────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ──────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 #> ✖ dplyr::filter() masks stats::filter()
 #> ✖ dplyr::lag()    masks stats::lag()
 library (ggplot2)
@@ -54,12 +54,12 @@ temps <- create_temp_vec(loc)
 #> Registered S3 method overwritten by 'hoardr':
 #>   method           from
 #>   print.cache_info httr
-#> Data saved as /tmp/RtmpCrvYlp/IDCJAC0010_70351_1800_Data.csv
-#> Data saved as /tmp/RtmpCrvYlp/IDCJAC0011_70351_1800_Data.csv
-#> Data saved as /tmp/RtmpCrvYlp/IDCJAC0010_70339_1800_Data.csv
-#> Data saved as /tmp/RtmpCrvYlp/IDCJAC0011_70339_1800_Data.csv
-#> Data saved as /tmp/RtmpCrvYlp/IDCJAC0010_70349_1800_Data.csv
-#> Data saved as /tmp/RtmpCrvYlp/IDCJAC0011_70349_1800_Data.csv
+#> Data saved as /tmp/RtmpnSgFaz/IDCJAC0010_70351_1800_Data.csv
+#> Data saved as /tmp/RtmpnSgFaz/IDCJAC0011_70351_1800_Data.csv
+#> Data saved as /tmp/RtmpnSgFaz/IDCJAC0010_70339_1800_Data.csv
+#> Data saved as /tmp/RtmpnSgFaz/IDCJAC0011_70339_1800_Data.csv
+#> Data saved as /tmp/RtmpnSgFaz/IDCJAC0010_70349_1800_Data.csv
+#> Data saved as /tmp/RtmpnSgFaz/IDCJAC0011_70349_1800_Data.csv
 #> Calculating sine coefficient
 #> Calculating Ta
 
@@ -74,7 +74,7 @@ degree growth for
 QFF.
 
 ``` r
-model1 <- yonow_model(tempvec = temps$Ta, datevec = temps$Date, start.date="2018-12-14")
+model1 <- yonow_model(tempvec = temps$Ta, datevec = temps$Date, start.date="2019-12-14")
 ```
 
 Just plotting the model output gives development times and dates for the
@@ -88,13 +88,13 @@ ggplot(model1, aes(Date, value, colour=variable))+
   theme_minimal()
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="50%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 Its also possible to include the teneral female
 stage
 
 ``` r
-model2 <- yonow_model(tempvec = temps$Ta, datevec = temps$Date, start.date="2018-12-14",
+model2 <- yonow_model(tempvec = temps$Ta, datevec = temps$Date, start.date="2019-12-14",
                       adult = TRUE)
 ```
 
@@ -122,7 +122,7 @@ ggplot(model2, aes(Date, value2, colour=variable))+
   theme_minimal()
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="50%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
 
 ## References
 

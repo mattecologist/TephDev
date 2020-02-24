@@ -194,12 +194,15 @@ yonow_model <- function(tempvec = tempvec, datevec = datevec, start.date = start
         model.out$value <- 1 - model.out$value
         model.out$value[model.out$value < 0] <- 0
         model.out <- model.out[order(model.out$Date), ]
-        model.out$value[model.out$variable == "larvae"] <- model.out$value[model.out$variable == "larvae"] + max(model.out$value[model.out$variable ==
-            "egg"])
-        model.out$value[model.out$variable == "pupae"] <- model.out$value[model.out$variable == "pupae"] + max(model.out$value[model.out$variable ==
-            "larvae"])
     }
 
+## This is not used inside functiona the moment....
+    
+    # model.out$value[model.out$variable == "larvae"] <- model.out$value[model.out$variable == "larvae"] + max(model.out$value[model.out$variable ==
+    #      "egg"])
+    # model.out$value[model.out$variable == "pupae"] <- model.out$value[model.out$variable == "pupae"] + max(model.out$value[model.out$variable ==
+    #      "larvae"])
+    # 
     return(model.out)
 
 
