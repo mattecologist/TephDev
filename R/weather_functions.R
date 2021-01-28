@@ -276,11 +276,12 @@ create_temp_vec <- function(xy = xy, datemin=Sys.Date()-365, datemax=Sys.Date())
 
     }
 
-    statid <- bomrang::sweep_for_stations(latlon=c(xy[[1]], xy[[2]]))$site[1:3]
+    statid <- bomrang::sweep_for_stations(latlon=c(xy[[1]], xy[[2]]))$site[1:4]
 
-    temp.dat1 <- get_temp_data(station=as.numeric(statid[1]), datemin=as.Date(datemin), datemax=as.Date(datemax))
+    try(temp.dat1 <- get_temp_data(station=as.numeric(statid[1]), datemin=as.Date(datemin), datemax=as.Date(datemax)))
     try(temp.dat2 <- get_temp_data(station=as.numeric(statid[2]), datemin=as.Date(datemin), datemax=as.Date(datemax)))
     try(temp.dat3 <- get_temp_data(station=as.numeric(statid[3]), datemin=as.Date(datemin), datemax=as.Date(datemax)))
+    try(temp.dat4 <- get_temp_data(station=as.numeric(statid[4]), datemin=as.Date(datemin), datemax=as.Date(datemax)))
 
     temp.dat.list <- list()
     
@@ -299,6 +300,12 @@ create_temp_vec <- function(xy = xy, datemin=Sys.Date()-365, datemax=Sys.Date())
     if (exists("temp.dat3")){
         if (nrow(temp.dat3 > 1)){
             temp.dat.list$temp.dat3 <- temp.dat3
+        }
+    }
+    
+    if (exists("temp.dat4")){
+        if (nrow(temp.dat4 > 1)){
+            temp.dat.list$temp.dat4 <- temp.dat4
         }
     }
     
@@ -326,6 +333,13 @@ create_temp_vec <- function(xy = xy, datemin=Sys.Date()-365, datemax=Sys.Date())
     temp.dat[match(blanks.fill$Date, temp.dat$Date), ] <- blanks.fill
     }
 
+    ## again, just if there are still blanks
+    if (exists("temp.dat4")){
+        blanks.fill <- temp.dat4[which(temp.dat4$Date %in% temp.dat$Date[is.na(temp.dat$Tmin) | is.na (temp.dat$Tmax)]),]
+        temp.dat[match(blanks.fill$Date, temp.dat$Date), ] <- blanks.fill
+    }
+    
+    
     ## 'climate' should be a dataframe of (Date, Latitude, Longitude, Tmin, Tmax)
     climate <- cbind(temp.dat$Date, xy[1], xy[2], temp.dat[,c("Tmin", "Tmax")])
     colnames (climate) <- c("Date", "Latitude", "Longitude", "Tmin", "Tmax")
