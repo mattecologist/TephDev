@@ -279,25 +279,52 @@ create_temp_vec <- function(xy = xy, datemin=Sys.Date()-365, datemax=Sys.Date())
     statid <- bomrang::sweep_for_stations(latlon=c(xy[[1]], xy[[2]]))$site[1:3]
 
     temp.dat1 <- get_temp_data(station=as.numeric(statid[1]), datemin=as.Date(datemin), datemax=as.Date(datemax))
-    temp.dat2 <- get_temp_data(station=as.numeric(statid[2]), datemin=as.Date(datemin), datemax=as.Date(datemax))
-    temp.dat3 <- get_temp_data(station=as.numeric(statid[3]), datemin=as.Date(datemin), datemax=as.Date(datemax))
+    try(temp.dat2 <- get_temp_data(station=as.numeric(statid[2]), datemin=as.Date(datemin), datemax=as.Date(datemax)))
+    try(temp.dat3 <- get_temp_data(station=as.numeric(statid[3]), datemin=as.Date(datemin), datemax=as.Date(datemax)))
 
+    temp.dat.list <- list()
+    
+    if (exists("temp.dat1")){
+        if (nrow(temp.dat1 > 1)){
+            temp.dat.list$temp.dat1 <- temp.dat1
+        }
+    }
+    
+    if (exists("temp.dat2")){
+        if (nrow(temp.dat2 > 1)){
+            temp.dat.list$temp.dat2 <- temp.dat2
+        }
+    }
+    
+    if (exists("temp.dat3")){
+        if (nrow(temp.dat3 > 1)){
+            temp.dat.list$temp.dat3 <- temp.dat3
+        }
+    }
+    
     ## add to a list
-    temp.dat.list <- list(temp.dat1, temp.dat2, temp.dat3)
+    #temp.dat.list <- list(temp.dat1, temp.dat2, temp.dat3)
 
     ## determine which is longest
-    temp.dat <- temp.dat.list[[which.max(c(nrow(temp.dat1), nrow(temp.dat2), nrow(temp.dat3)))]]
+    lengths <- lapply(temp.dat.list, nrow)
+    temp.dat <- temp.dat.list[[which.max(lengths)]]
 
     # fill data with nearest station
+    if (exists("temp.dat1")){
     temp.dat[match(temp.dat1$Date, temp.dat$Date), ] <- temp.dat1
+    }
 
     ## fill in blanks
+    if (exists("temp.dat2")){
     blanks.fill <- temp.dat2[which(temp.dat2$Date %in% temp.dat$Date[is.na(temp.dat$Tmin) | is.na (temp.dat$Tmax)]),]
     temp.dat[match(blanks.fill$Date, temp.dat$Date), ] <- blanks.fill
+    }
 
     ## again, just if there are still blanks
+    if (exists("temp.dat3")){
     blanks.fill <- temp.dat3[which(temp.dat3$Date %in% temp.dat$Date[is.na(temp.dat$Tmin) | is.na (temp.dat$Tmax)]),]
     temp.dat[match(blanks.fill$Date, temp.dat$Date), ] <- blanks.fill
+    }
 
     ## 'climate' should be a dataframe of (Date, Latitude, Longitude, Tmin, Tmax)
     climate <- cbind(temp.dat$Date, xy[1], xy[2], temp.dat[,c("Tmin", "Tmax")])
