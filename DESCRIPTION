@@ -13,7 +13,10 @@ Imports:
     suncalc,
     lubridate,
     raster,
-    bomrang
+    bomrang,
+    magrittr,
+    sf,
+    terra
 RoxygenNote: 7.1.1
 Suggests: 
     testthat,

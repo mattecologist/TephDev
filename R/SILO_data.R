@@ -6,7 +6,7 @@
 #' @param xy Coordinates of sites to extract data from
 #' @param datemin Date to begin extraction from
 #' @param datemax Date to end extraction from
-#' @return A dataframe of Tmin and Tmax values for 
+#' @return A dataframe of Tmin and Tmax values for a given list of lat-longs
 #' @author Matt Hill
 #' @export
 
@@ -43,7 +43,7 @@ Tmin <- Tmin[[which(names(Tmin)==x1):which(names(Tmin)==x2)]]
 Tmax <- Tmax[[which(names(Tmax)==x1):which(names(Tmax)==x2)]]
 
 xy <- site_list %>%
-  st_as_sf(coords=c("y", "x"))
+  sf::st_as_sf(coords=c("y", "x"))
 
 p <- terra::vect(xy)
 
@@ -53,8 +53,11 @@ tmax_hold <- as.data.frame(t(terra::extract (Tmax, p)))
 colnames(tmin_hold) <- site_list$Site
 colnames(tmax_hold) <- site_list$Site
 
+if (ncol(tmin_hold) > 1){
 tmin_hold <- tmin_hold[-1,]
 tmax_hold <- tmax_hold[-1,]
+}
+
 
 tmin_hold <- tmin_hold %>%
   tibble::rownames_to_column("Date")%>%
@@ -65,6 +68,12 @@ tmax_hold <- tmax_hold %>%
   tibble::rownames_to_column("Date")%>%
   reshape2::melt()%>%
   dplyr::rename(Date = Date, Site=variable, Tmax=value)
+
+if (ncol(tmin_hold) < 4){
+  tmin_hold <- tmin_hold[-1,]
+  tmax_hold <- tmax_hold[-1,] 
+}
+
 
 tempvec_sites <- dplyr::left_join(tmin_hold, tmax_hold)
 
